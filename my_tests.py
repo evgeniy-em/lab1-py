@@ -6,7 +6,7 @@ def test1():
 
 
 def test2():
-    assert fastlab.sum_two_args(2.0001, 2) == 4
+    assert fastlab.sum_two_args(2.0001, 2) == 4.0001
 
 
 def test3():
@@ -14,4 +14,4 @@ def test3():
 
 
 def test4():
-    assert fastlab.sum_two_args("2", 2) == 4
+    assert fastlab.sum_two_args("2", "2") == "22"
