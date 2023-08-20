@@ -4,9 +4,13 @@
         <meta charset="UTF-8">
         <title>Lab 1</title>
         <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
     <body>
-        <form action="process-image" enctype="multipart/form-data" method="post" class="main-form">
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <form action="/" enctype="multipart/form-data" method="post" class="main-form">
             <fieldset class="main-form__direction">
                 <legend>Select direction</legend>
 
@@ -25,6 +29,8 @@
                 Image
                 <input required type="file" accept="image/jpeg" name="image">
             </label>
+
+            <div class="g-recaptcha" data-sitekey="{{ sitekey }}"></div>
 
             <input type="submit" value="Submit" class="main-form__submit">
         </form>

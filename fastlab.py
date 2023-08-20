@@ -1,13 +1,18 @@
 import base64
 import io
+import json
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
-from fastapi import FastAPI, Form, Request, UploadFile
+from fastapi import FastAPI, Form, Request, UploadFile, Body
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from PIL import Image
 
 app = FastAPI()
+
+sitekey = "6Lf-fr4nAAAAAD4ym_ggSgZC1GsAdxQs8l2-K1QP"
 
 
 def sum_two_args(x, y):
@@ -21,16 +26,26 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 async def main(request: Request):
-    return templates.TemplateResponse("main.html", {"request": request})
+    return templates.TemplateResponse("main.html", {"request": request, "sitekey": sitekey})
 
 
-@app.get("/process-image", response_class=HTMLResponse)
-async def process_image(request: Request):
-    return templates.TemplateResponse("main.html", {"request": request})
+@app.post("/", response_class=HTMLResponse)
+async def process_image(request: Request, image: UploadFile, direction: str = Form(), token: str = Body(alias="g-recaptcha-response", default="")):
+    print(token)
 
+    url = 'https://www.google.com/recaptcha/api/siteverify'
+    private_recaptcha = '6Lf-fr4nAAAAANuXY_U4-JtYXtKZ3lXEYMdMqY88'
+    params = urlencode({
+        'secret': private_recaptcha,
+        'response': token,
+    })
 
-@app.post("/process-image", response_class=HTMLResponse)
-async def process_image(request: Request, image: UploadFile, direction: str = Form()):
+    data = urlopen(url, params.encode('utf-8')).read()
+    result = json.loads(data)
+    success = result.get('success', None)
+
+    if not success:
+        return templates.TemplateResponse("main.html", {"request": request, "sitekey": sitekey, "error": "Captcha failed"})
 
     content = await image.read()
 
@@ -59,5 +74,5 @@ async def process_image(request: Request, image: UploadFile, direction: str = Fo
     image_src = base64.b64encode(temp.getvalue()).decode()
 
     return templates.TemplateResponse("main.html",
-                                      {"request": request, "direction": direction, "filename": image.filename, "image_src": image_src})
+                                      {"request": request, "direction": direction, "filename": image.filename, "image_src": image_src, "sitekey": sitekey})
 

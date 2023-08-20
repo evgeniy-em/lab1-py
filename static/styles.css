@@ -9,3 +9,9 @@
  {
     width: max-content;
 }
+
+.error {
+    color: red;
+    padding: 1rem;
+    font-weight: bold;
+}
