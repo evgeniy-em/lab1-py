@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Lab 1</title>
+        <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+    </head>
+    <body>
+        <form action="process-image" enctype="multipart/form-data" method="post" class="main-form">
+            <fieldset class="main-form__direction">
+                <legend>Select direction</legend>
+
+                <label>
+                    Horizontal
+                    <input required type="radio" name="direction" value="horizontal" {{ 'checked' if direction == 'horizontal' or not direction}}>
+                </label>
+
+                <label>
+                    Vertical
+                    <input required type="radio" name="direction" value="vertical" {{ 'checked' if direction == 'vertical'}}>
+                </label>
+            </fieldset>
+
+            <label>
+                Image
+                <input required type="file" accept="image/jpeg" name="image">
+            </label>
+
+            <input type="submit" value="Submit" class="main-form__submit">
+        </form>
+
+        {% if image_src %}
+            <h2>Result:</h2>
+
+            <img src="data:image/jpg; base64, {{ image_src }}">
+        {% endif %}
+    </body>
+</html>

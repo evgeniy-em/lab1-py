@@ -1,0 +1,11 @@
+.main-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.main-form__submit,
+.main-form__direction
+ {
+    width: max-content;
+}
