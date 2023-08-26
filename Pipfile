@@ -11,6 +11,8 @@ pytest = "*"
 jinja2 = "*"
 python-multipart = "*"
 Pillow = "*"
+matplotlib = "*"
+numpy = "*"
 
 [dev-packages]
 

@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     </head>
+
     <body>
         {% if error %}
             <div class="error">{{ error }}</div>
@@ -39,6 +40,12 @@
             <h2>Result:</h2>
 
             <img src="data:image/jpg; base64, {{ image_src }}">
+        {% endif %}
+
+        {% if graphs_src %}
+            <h2>Graphs:</h2>
+
+            <img src="data:image/jpg; base64, {{ graphs_src }}">
         {% endif %}
     </body>
 </html>
