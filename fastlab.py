@@ -4,7 +4,7 @@ import json
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from fastapi import FastAPI, Form, Request, UploadFile, Body
+from fastapi import FastAPI, Form, Request, UploadFile, Body, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -48,6 +48,10 @@ async def process_image(request: Request, image: UploadFile, direction: str = Fo
 
     if not success:
         return templates.TemplateResponse("main.html", {"request": request, "sitekey": sitekey, "error": "Captcha failed"})
+
+    # check file type
+    if image.content_type != "image/jpeg":
+        raise HTTPException(400, detail="Wrong file type")
 
     content = await image.read()
 
